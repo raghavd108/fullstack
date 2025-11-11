@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Rent Cart - Rentoin</title>
+    <link rel="stylesheet" href="css/Detail.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .cart-img {
+        width: 100px;
+        height: auto;
+        border-radius: 8px;
+        object-fit: cover;
+      }
+      #cart-container {
+        padding: 20px;
+        max-width: 600px;
+        margin: auto;
+      }
+      .cart-item {
+        border: 1px solid #ddd;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 10px;
+      }
+      .cart-item button {
+        background-color: crimson;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        cursor: pointer;
+      }
+      .cart-item button:hover {
+        background-color: darkred;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Rentoin - Your Rent Cart</h1>
+      <a href="index.html">← Back to Home</a>
+    </header>
+
+    <main>
+      <div id="cart-container">
+        <h2>Your Rental Items</h2>
+        <div id="cart-items"></div>
+        <div id="cart-total"></div>
+      </div>
+    </main>
+
+    <script>
+      function loadCart() {
+        const cart = JSON.parse(localStorage.getItem("rentCart")) || [];
+        const cartItemsDiv = document.getElementById("cart-items");
+        const cartTotalDiv = document.getElementById("cart-total");
+        cartItemsDiv.innerHTML = "";
+
+        if (cart.length === 0) {
+          cartItemsDiv.innerHTML = "<p>Your rent cart is empty.</p>";
+          cartTotalDiv.innerHTML = "";
+          return;
+        }
+
+        let total = 0;
+        cart.forEach((item, index) => {
+          const itemTotal = item.pricePerDay * item.rentalDays * item.quantity;
+          total += itemTotal;
+
+          const itemDiv = document.createElement("div");
+          itemDiv.className = "cart-item";
+          itemDiv.innerHTML = `
+          <img src="${item.image}" alt="${item.name}" class="cart-img" />
+          <h3>${item.name}</h3>
+          <p>Price/Day: ₹${item.pricePerDay}</p>
+          <p>Duration: ${item.rentalDays} days</p>
+          <p>Quantity: ${item.quantity}</p>
+          <p><strong>Total: ₹${itemTotal}</strong></p>
+          <button onclick="removeItem(${index})">Remove</button>
+          <hr/>
+        `;
+          cartItemsDiv.appendChild(itemDiv);
+        });
+
+        cartTotalDiv.innerHTML = `<h3>Grand Total: ₹${total}</h3>`;
+      }
+
+      function removeItem(index) {
+        let cart = JSON.parse(localStorage.getItem("rentCart")) || [];
+        cart.splice(index, 1);
+        localStorage.setItem("rentCart", JSON.stringify(cart));
+        loadCart();
+      }
+
+      window.onload = loadCart;
+    </script>
+  </body>
+</html>

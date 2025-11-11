@@ -1,0 +1,101 @@
+/* Style for the Bottom Navigation Bar */
+.bottom-nav {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  background-color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  padding: 10px 0;
+  z-index: 10;
+}
+
+.bottom-nav .nav ul {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.bottom-nav .nav ul li {
+  flex: 1;
+  text-align: center;
+  position: relative;
+}
+
+.bottom-nav .nav ul li a {
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  transition: color 0.3s ease;
+}
+
+.bottom-nav .nav ul li a i {
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+.bottom-nav .nav ul li a:hover {
+  color: orange;
+}
+
+/* Popup Menu Styling */
+.category-popup {
+  position: absolute;
+  background: white;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  top: -150px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 220px;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.category-popup ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.category-popup ul li {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+}
+
+.category-popup ul li:last-child {
+  border-bottom: none;
+}
+
+.category-popup ul li a {
+  color: #333;
+  font-weight: normal;
+  text-decoration: none;
+  display: block;
+  transition: color 0.3s;
+}
+
+.category-popup ul li a:hover {
+  color: #007bff;
+  font-weight: bold;
+}
+
+/* JavaScript controlled class */
+.category-popup.show {
+  display: block;
+  opacity: 1;
+  transform: translateX(-50%) translateY(10px);
+}

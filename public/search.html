@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Search Results</title>
+    <link rel="stylesheet" href="css/search.css" />
+  </head>
+  <body>
+    <!-- Intro Section -->
+    <section class="intro-section">
+      <!-- Header -->
+      <header>
+        <div class="left-header">
+          <a href="index.html"
+            ><img src="img/logo.jpg" alt="Rentoin Logo" class="logo"
+          /></a>
+          <h1>Rentoin</h1>
+        </div>
+        <div class="right-header">
+          <div class="popup-trigger">
+            <a href="#">Deliver to:</a>
+            <div class="popup-content">
+              <h3>Specify Your Location</h3>
+              <p>Shipping options and fees vary based on your location.</p>
+              <button><a href="auth.html">Sign in to add address</a></button>
+              <p>Or</p>
+              <select>
+                <option value="India">India</option>
+                <option value="USA">USA</option>
+                <option value="UK">UK</option>
+              </select>
+              <input type="text" placeholder="Enter ZIP or postal code" />
+              <button>Save</button>
+            </div>
+          </div>
+          <div class="popup-trigger">
+            <a href="#">Language:</a>
+            <div class="popup-content">
+              <h3>Select Language</h3>
+              <select>
+                <option value="en">English</option>
+                <option value="hi">Hindi</option>
+                <option value="es">Spanish</option>
+                <option value="fr">French</option>
+              </select>
+              <button>Save</button>
+            </div>
+          </div>
+          <div class="popup-trigger">
+            <a href="#"><i class="fa-solid fa-cart-shopping"></i></a>
+            <div class="popup-content">
+              <h3>Your Cart</h3>
+              <p>You have 0 items in your cart.</p>
+              <button><a href="cart.html">View Cart</a></button>
+            </div>
+          </div>
+          <button class="Sign"><a href="auth.html">Sign In</a></button>
+          <!-- Filter Button -->
+          <button id="filter-btn" class="filter-btn">Filter</button>
+        </div>
+      </header>
+      <!-- Search Bar -->
+      <div class="search-container">
+        <input
+          type="text"
+          id="search-bar"
+          placeholder="Search for products..."
+        />
+        <button class="icon-btn">
+          <i class="fa-solid fa-camera"></i>
+        </button>
+        <button class="search-btn" onclick="searchProducts()">Search</button>
+      </div>
+    </section>
+
+    <!-- Filter Popup -->
+    <div id="filter-overlay" class="filter-overlay"></div>
+    <div id="filter-popup" class="filter-popup">
+      <button id="close-filter" class="close-btn">X</button>
+      <h3>Filter Products</h3>
+      <div>
+        <label for="filter-category">Category:</label>
+        <select id="filter-category">
+          <option value="all">All</option>
+          <option value="furniture">Furniture</option>
+          <option value="vehicles">Vehicles</option>
+          <option value="electronics">Electronics</option>
+          <option value="office">Office Equipment</option>
+        </select>
+      </div>
+      <div>
+        <label for="filter-price">Price:</label>
+        <select id="filter-price">
+          <option value="all">All</option>
+          <option value="low-to-high">Low to High</option>
+          <option value="high-to-low">High to Low</option>
+        </select>
+      </div>
+      <div>
+        <label for="filter-rating">Rating:</label>
+        <select id="filter-rating">
+          <option value="all">All</option>
+          <option value="5">5 Stars</option>
+          <option value="4">4 Stars & Up</option>
+          <option value="3">3 Stars & Up</option>
+        </select>
+      </div>
+      <button onclick="applyFilters()">Apply Filters</button>
+    </div>
+
+    <section id="results">
+      <h2>Showing results for: <span id="search-term"></span></h2>
+      <div class="product-list"></div>
+    </section>
+
+    <div id="navbar"></div>
+
+    <script src="in.js"></script>
+    <script src="search.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const params = new URLSearchParams(window.location.search);
+        const query = params.get("query");
+        document.getElementById("search-term").textContent = query;
+
+        const products = [
+          {
+            id: 2,
+            name: "Sofa",
+            category: "Furniture",
+            image: "img/furniture.webp",
+          },
+          {
+            id: 3,
+            name: "Car",
+            category: "Vehicles",
+            image: "img/Vehicles.avif",
+          },
+          {
+            id: 1,
+            name: "Bicycle",
+            category: "Vehicles",
+            image: "img/cycle.HEIC",
+          },
+          {
+            id: 4,
+            name: "Laptop",
+            category: "Electronics",
+            image: "img/electronic.avif",
+          },
+          {
+            id: 5,
+            name: "Office Chair",
+            category: "Office Equipment",
+            image: "img/office.jpeg",
+          },
+        ];
+
+        const filteredProducts = products.filter(
+          (product) =>
+            product.name.toLowerCase().includes(query.toLowerCase()) ||
+            product.category.toLowerCase().includes(query.toLowerCase())
+        );
+
+        const resultsContainer = document.querySelector(".product-list");
+        resultsContainer.innerHTML = filteredProducts.length
+          ? filteredProducts
+              .map(
+                (product) =>
+                  `<div class="product-card" onclick="goToProduct(${product.id})"')">
+                      <img src="${product.image}" alt="${product.name}">
+                      <p>${product.name} - ${product.category}</p>
+                  </div>`
+              )
+              .join("")
+          : "<p>No products found</p>";
+      });
+
+      function goToProduct(productId) {
+        window.location.href = `productdetail.html?id=${encodeURIComponent(
+          productId
+        )}`;
+      }
+    </script>
+    <script src="categories.js"></script>
+  </body>
+</html>
