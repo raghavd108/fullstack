@@ -11,6 +11,7 @@ const signinRoutes = require("./routes/signin");
 const signoutRoutes = require("./routes/signout");
 const productRoutes = require("./routes/indi_pro");
 const businessRoutes = require("./routes/business_pro");
+const aiRoutes = require("./routes/ai.js");
 
 const app = express();
 const PORT = 8001;
@@ -34,6 +35,7 @@ app.use("/api/businesses", businessRoutes);
 app.use("/signup", signupRoutes);
 app.use("/signin", signinRoutes);
 app.use("/signout", signoutRoutes);
+app.use("/api/ai", aiRoutes);
 
 // MongoDB Connection
 mongoose

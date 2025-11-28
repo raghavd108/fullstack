@@ -1,18 +1,22 @@
-import express from "express";
-import Groq from "groq-sdk";
+const express = require("express");
+const Groq = require("groq-sdk");
 
 const router = express.Router();
 const client = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 router.post("/chat", async (req, res) => {
-  const { message } = req.body;
+  try {
+    const { message } = req.body;
 
-  const completion = await client.chat.completions.create({
-    model: "llama3-8b-8192",
-    messages: [{ role: "user", content: message }],
-  });
+    const completion = await client.chat.completions.create({
+      model: "llama3-8b-8192",
+      messages: [{ role: "user", content: message }],
+    });
 
-  res.json({ reply: completion.choices[0].message.content });
+    res.json({ reply: completion.choices[0].message.content });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-export default router;
+module.exports = router;

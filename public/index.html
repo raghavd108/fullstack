@@ -11,10 +11,26 @@
     <title>Rentoin</title>
   </head>
   <body>
+    <!-- Floating Chat Button -->
+    <button id="chatToggleBtn" class="chat-open-btn">Chat 💬</button>
+
+    <!-- Chat Box Container -->
+    <div class="glass" id="chatContainer" style="display: none">
+      <div class="chat-header">
+        <span>AI Chat</span>
+        <button class="close-chat-btn" onclick="closeChat()">×</button>
+      </div>
+
+      <div id="chatBox"></div>
+
+      <div class="input-box">
+        <input id="userInput" placeholder="Type here..." />
+        <button class="send-btn" onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+
     <!-- Intro Section with Background Image -->
     <section class="intro-section">
-      <!-- Right-hand corner: Sign-in, Cart, Deliver to, Language -->
-
       <div class="right-header">
         <div class="popup-trigger">
           <a href="#">Deliver to:</a>
@@ -32,6 +48,7 @@
             <button>Save</button>
           </div>
         </div>
+
         <!-- Language Selector -->
         <div class="popup-trigger">
           <a href="#">Language:</a>
@@ -60,29 +77,23 @@
         <button class="Sign"><a href="auth.html">Sign In</a></button>
       </div>
 
-      <!-- Left-hand corner: Logo and Name -->
       <div class="left-header">
-        <a href="index.html"
-          ><img src="img/logo.jpg" alt="Rentoin Logo" class="logo"
-        /></a>
+        <a href="index.html">
+          <img src="img/logo.jpg" alt="Rentoin Logo" class="logo" />
+        </a>
         <h1>Rentoin</h1>
       </div>
 
       <div class="content">
-        <h1 class="headline">Rent Anything, Anytime, Anywhere</h1>
-        <p>
-          Explore a wide range of products for rent, from furniture to vehicles,
-          electronics, and more.
-        </p>
+        <h1 class="headline">Buy Anything, Anytime, Anywhere</h1>
+        <p>Explore products from furniture to vehicles and more.</p>
         <div class="search-container">
           <input
             type="text"
             id="search-bar"
             placeholder="Search for products..."
           />
-          <button class="icon-btn">
-            <i class="fa-solid fa-camera"></i>
-          </button>
+          <button class="icon-btn"><i class="fa-solid fa-camera"></i></button>
           <button class="search-btn">Search</button>
         </div>
       </div>
@@ -94,99 +105,91 @@
         <div class="step">
           <i class="fa-solid fa-magnifying-glass"></i>
           <h3>Search & Select</h3>
-          <p>
-            Find the perfect product for your needs from our extensive
-            collection.
-          </p>
+          <p>Find what you need from our wide collection.</p>
         </div>
         <div class="step">
           <i class="fa-solid fa-handshake"></i>
           <h3>Book & Rent</h3>
-          <p>Book your product for rent with flexible rental periods.</p>
+          <p>Choose flexible rental periods.</p>
         </div>
         <div class="step">
           <i class="fa-solid fa-truck"></i>
           <h3>Get It Delivered</h3>
-          <p>
-            Receive your rented item at your doorstep with hassle-free delivery.
-          </p>
+          <p>We deliver directly to your doorstep.</p>
         </div>
       </div>
     </section>
 
-    <!-- Top Categories Section -->
     <section class="categories">
       <h2>Top Categories</h2>
       <div class="category-container">
         <a href="categories.html"
           ><div class="category-card">
-            <img src="img/furniture.webp" alt="Furniture" />
+            <img src="img/furniture.webp" />
             <p>Furniture</p>
-          </div>
-        </a>
+          </div></a
+        >
         <a href="categories.html"
           ><div class="category-card">
-            <img src="img/Vehicles.avif" alt="Vehicles" />
+            <img src="img/Vehicles.avif" />
             <p>Vehicles</p>
           </div></a
         >
-
         <a href="categories.html"
           ><div class="category-card">
-            <img src="img/electronic.avif" alt="Electronics" />
+            <img src="img/electronic.avif" />
             <p>Electronics</p>
           </div></a
         >
         <a href="categories.html"
           ><div class="category-card">
-            <img src="img/office.jpeg" alt="Office Equipment" />
+            <img src="img/office.jpeg" />
             <p>Office Equipment</p>
           </div></a
         >
       </div>
     </section>
-
     <div id="navbar"></div>
 
     <script src="in.js"></script>
     <script src="search.js"></script>
+
     <script>
-      // JavaScript to handle all popup-trigger and popup-content pairs
-      document.addEventListener("DOMContentLoaded", () => {
-        const triggers = document.querySelectorAll(".popup-trigger");
+      function openChat() {
+        document.getElementById("chatContainer").style.display = "flex";
+        document.getElementById("chatToggleBtn").style.display = "none";
+      }
 
-        triggers.forEach((trigger) => {
-          const popup = trigger.querySelector(".popup-content");
-          let hideTimeout;
+      function closeChat() {
+        document.getElementById("chatContainer").style.display = "none";
+        document.getElementById("chatToggleBtn").style.display = "block";
+      }
 
-          trigger.addEventListener("mouseenter", () => {
-            clearTimeout(hideTimeout);
-            popup.style.display = "block";
-          });
+      document
+        .getElementById("chatToggleBtn")
+        .addEventListener("click", openChat);
+    </script>
 
-          popup.addEventListener("mouseenter", () => {
-            clearTimeout(hideTimeout);
-            popup.style.display = "block";
-          });
+    <script>
+      async function sendMessage() {
+        const box = document.getElementById("chatBox");
+        const input = document.getElementById("userInput");
+        const text = input.value.trim();
+        if (!text) return;
 
-          trigger.addEventListener("mouseleave", () => {
-            hideTimeout = setTimeout(() => {
-              popup.style.display = "none";
-            }, 300); // Short delay to allow cursor to enter popup
-          });
+        box.innerHTML += `<div class="bubble user">${text}</div>`;
+        box.scrollTop = box.scrollHeight;
+        input.value = "";
 
-          popup.addEventListener("mouseleave", () => {
-            hideTimeout = setTimeout(() => {
-              popup.style.display = "none";
-            }, 300); // Optional: adjust if user takes time to leave popup
-          });
+        const res = await fetch("/api/ai/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: text }),
         });
-      });
 
-      // Placeholder for search functionality
-      function searchProducts() {
-        const query = document.getElementById("search-bar").value;
-        alert("Searching for: " + query);
+        const data = await res.json();
+        box.innerHTML += `<div class="bubble bot">${data.reply}</div>`;
+        box.scrollTop = box.scrollHeight;
       }
     </script>
   </body>
