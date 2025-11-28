@@ -2,7 +2,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const User = require("./models/User");
 const session = require("express-session");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
+
 require("dotenv").config();
 const bodyParser = require("body-parser");
 const path = require("path");
