@@ -15,7 +15,8 @@ const businessRoutes = require("./routes/business_pro");
 const aiRoutes = require("./routes/ai.js");
 
 const app = express();
-const PORT = 8001;
+
+const PORT = process.env.PORT || 8001;
 
 // Middleware
 app.use(bodyParser.json());
@@ -31,6 +32,7 @@ app.use(
     cookie: { secure: false },
   })
 );
+
 app.use("/api/products", productRoutes);
 app.use("/api/businesses", businessRoutes);
 app.use("/signup", signupRoutes);
@@ -49,5 +51,5 @@ mongoose
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
